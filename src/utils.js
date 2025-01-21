@@ -10,7 +10,7 @@ const pool = new Pool({
  * @param {Array} values - The values to insert into the query.
  * @returns {Promise} - A promise that resolves to the result of the query.
  * @example
- * const result = await query('SELECT * FROM users WHERE username = $1', ['johndoe']);
+ * const result = await query(`SELECT * FROM users WHERE username = $1`, ['johndoe']);
  */
 export async function query(query, values) {
   const client = await pool.connect();
