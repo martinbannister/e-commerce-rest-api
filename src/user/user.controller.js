@@ -24,8 +24,7 @@ export async function getUsers(req, res) {
     }
 }
 
-// Routes that require id
-
+// Endpoints that require id
 export async function getUserById(req, res) {
     const { id } = req.params;
     try {
