@@ -1,4 +1,4 @@
-import { query } from "../utils";
+import { queryDatabase } from "../utils";
 
 export async function createUser(req, res) {
     const { username, email, password } = req.body;
@@ -16,7 +16,7 @@ export async function createUser(req, res) {
 
 export async function getUsers(req, res) { 
     try {
-        const result = await query(`SELECT * FROM users`);
+        const result = await queryDatabase(`SELECT * FROM users`);
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).send(e.message);
@@ -28,7 +28,7 @@ export async function getUsers(req, res) {
 export async function getUserById(req, res) {
     const { id } = req.params;
     try {
-        const result = await query(`SELECT * FROM users WHERE id = $1`, [id]);
+        const result = await queryDatabase(`SELECT * FROM users WHERE id = $1`, [id]);
         res.status(200).json(result.rows[0]);
     } catch (e) {
         res.status(500).send(e.message);
@@ -40,7 +40,7 @@ export async function updateUser(req, res) {
     const { id } = req.params;
     const { username, email, password } = req.body;
     try {
-        const result = await query(
+        const result = await queryDatabase(
             `UPDATE users SET username = $1, email = $2, password = $3 WHERE id = $4 RETURNING *`,
             [username, email, password, id]
         );
@@ -54,7 +54,7 @@ export async function updateUser(req, res) {
 export async function deleteUser(req, res) {
     const { id } = req.params;
     try {
-        const result = await query(`DELETE FROM users WHERE id = $1`, [id]);
+        const result = await queryDatabase(`DELETE FROM users WHERE id = $1`, [id]);
         res.status(200).json(result.rows[0]);
     } catch (e) {
         res.status(500).send(e.message);
