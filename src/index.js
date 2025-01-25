@@ -1,7 +1,8 @@
+/*jshint esversion: 6 */ 
+
 import 'dotenv/config';
 import express from 'express';
 const app = express();
-const port = 3000;
 
 app.get('/', (req, res) => {
     res.send('Server is running');
@@ -9,6 +10,6 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRouter);
 
-app.listen(port, () => {
-    console.log(`app is listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+    console.log(`app is listening on port ${process.env.PORT}`);
 });
