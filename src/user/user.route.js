@@ -1,8 +1,8 @@
 import express from 'express';
-import { getAllUsers, createUser, getUserById, updateUser, deleteUser } from './user.controller.js';
+import { getUsers, createUser, getUserById, updateUser, deleteUser } from './user.controller.js';
 const userRouter = express.Router();
 
-userRouter.get('/', getAllUsers);
+userRouter.get('/', getUsers);
 userRouter.post('/', createUser);
 // Routes that require id
 userRouter.get('/:id', getUserById);
