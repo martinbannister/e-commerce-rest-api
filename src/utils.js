@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */ 
+
 import { Pool } from "pg";
 
 const pool = new Pool({
