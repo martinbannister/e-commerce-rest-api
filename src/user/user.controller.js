@@ -1,4 +1,4 @@
-import { query } from "../utils";
+import { query } from "../utils.js";
 
 export async function createUser(req, res) {
     const { username, email, password } = req.body;
