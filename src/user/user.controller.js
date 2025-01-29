@@ -42,10 +42,10 @@ export async function getUsers(req, res) {
 export async function getUserById(req, res) {
   const { id } = req.params;
   try {
-    const result = await queryDatabase(`SELECT * FROM users WHERE id = $1`, [
+    const { rows } = await queryDatabase(`SELECT * FROM users WHERE id = $1`, [
       id,
     ]);
-    res.status(200).json(result.rows[0]);
+    res.status(200).json(rows[0]);
   } catch (e) {
     res.status(500).send(e.message);
     console.log(e);
@@ -55,35 +55,17 @@ export async function getUserById(req, res) {
 //TODO: figure out a more elegant way to build the query 😒
 export async function updateUser(req, res) {
   const { id } = req.params;
-  const { username, email, password } = req.body;
+  const updatedData = req.body;
+  const query = `UPDATE users SET email = $1, username = $2, password = $3 WHERE id = $4 RETURNING *`;
+
   try {
-    const fields = [];
-    const values = [];
-    let query = 'UPDATE users SET ';
-
-    if (username !== undefined) {
-      fields.push('username = $' + (fields.length + 1));
-      values.push(username);
-    }
-    if (email !== undefined) {
-      fields.push('email = $' + (fields.length + 1));
-      values.push(email);
-    }
-    if (password !== undefined) {
-      fields.push('password = $' + (fields.length + 1));
-      values.push(password);
-    }
-
-    if (fields.length === 0) {
-      return res.status(400).send('No fields to update');
-    }
-
-    query += fields.join(', ') + ' WHERE id = $' + (fields.length + 1) + ' RETURNING *';
-    values.push(id);
-
-    const result = await queryDatabase(query, values);
+    const currentData = await queryDatabase('SELECT * FROM users WHERE id = $1', [id]);
+    const { email, username, password } = { ...currentData.rows[0], ...updatedData };
+    const values = [email, username, password, id];
+    
+    const result  = await queryDatabase(query, values);
     res.status(200).json(result.rows[0]);
-  } catch (e) {
+ } catch (e) {
     res.status(500).send(e.message);
     console.log(e);
   }
